@@ -1,51 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Calculator</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <header>
-            <h1>Free Online Calculator</h1>
-        </header>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online Calculator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Free Online Calculator</h1>
+  </header>
 
-        <main>
-            <section class="hero">
-                <section class="calculator">
-                    <div id="display">0</div>
+  <main>
+    <section class="hero">
+      <section class="calculator">
+        <input type="text" id="display" value="0" readonly>
 
-                    <button class="btn clear">AC</button>
-                    <button class="btn delete">⌫</button>
-                    <button class="btn operator">÷</button>
+        <button class="btn clear">AC</button>
+        <button class="btn backspace">⌫</button>
+        <button class="btn operator">÷</button>
 
-                    <button class="btn number">7</button>
-                    <button class="btn number">8</button>
-                    <button class="btn number">9</button>
-                    <button class="btn operator">×</button>
+        <button class="btn number">7</button>
+        <button class="btn number">8</button>
+        <button class="btn number">9</button>
+        <button class="btn operator">×</button>
 
-                    <button class="btn number">4</button>
-                    <button class="btn number">5</button>
-                    <button class="btn number">6</button>
-                    <button class="btn operator">-</button>
+        <button class="btn number">4</button>
+        <button class="btn number">5</button>
+        <button class="btn number">6</button>
+        <button class="btn operator">-</button>
 
-                    <button class="btn number">1</button>
-                    <button class="btn number">2</button>
-                    <button class="btn number">3</button>
-                    <button class="btn operator">+</button>
+        <button class="btn number">1</button>
+        <button class="btn number">2</button>
+        <button class="btn number">3</button>
+        <button class="btn operator">+</button>
 
-                    <button class="btn number">%</button>
-                    <button class="btn zero">0</button>
-                    <button class="btn number">.</button>
-                    <button class="btn equals">=</button>
+        <button class="btn number">0</button>
+        <button class="btn decimal">.</button>
+        <button class="btn equals">=</button>
+      </section>
+    </section>
+  </main>
 
-                </section>
-            </section>
-        </main>
+  <footer>
+    <p>Copyright: @2025; Designed by Ruth & Stefan</p>
+  </footer>
 
-        <footer>
-            <p>Copyright: @2025; Designed by Ruth&Stefan</p>
-        </footer>
-    </body>
+  <script src="calculator.js" defer></script>
+</body>
 </html>
