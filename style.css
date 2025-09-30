@@ -68,6 +68,7 @@ footer {
   color: #fff;
   transition: 0.2s;
 }
+
 .btn:hover {
   background-color: white;
   color: #444;
@@ -76,15 +77,27 @@ footer {
 .operator {
   background: #ff9800;
 }
+
 .clear {
   background: rgb(244, 34, 34);
-  grid-column: span 2;
 }
-.delete {
+
+.backspace {
   background: gray;
 }
+
 .equals {
   background: green;
+  grid-column: span 2;
+}
+
+.mode {
+  background: #1E90FF;
+}
+
+.mode.active {
+  background: #4caf50;
+  color: #fff;
 }
 
 @media (max-width: 700px) {

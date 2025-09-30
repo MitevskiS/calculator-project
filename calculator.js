@@ -1,13 +1,28 @@
 const display = document.getElementById("display");
 let expression = "";
 let justEvaluated = false;
+let chainMode = false;
+
+const modeBtn = document.querySelector(".mode");
+modeBtn.addEventListener("click", toggleMode);
+
+function toggleMode() {
+  chainMode = !chainMode;
+  modeBtn.classList.toggle("active", chainMode);
+  modeBtn.textContent = chainMode ? "Chain Mode" : "Math Mode";
+}
 
 function appendToDisplay(value) {
   if (justEvaluated) {
-    if (/[0-9.]/.test(value)) {
-      expression = "";
-    }
+    if (/[0-9.]/.test(value)) expression = "";
     justEvaluated = false;
+  }
+
+  if (/[+\-×÷]/.test(value) && /[+\-×÷]$/.test(expression)) {
+    expression = expression.slice(0, -1) + value;
+    display.value = expression;
+    adjustFontSize();
+    return;
   }
 
   if (value === "-" && (expression === "" || /[+\-×÷]$/.test(expression))) {
@@ -17,10 +32,19 @@ function appendToDisplay(value) {
     return;
   }
 
-  if (expression === "0" && value !== "." && value !== "-") {
-    expression = value;
+  if (/[+\-×÷]/.test(value) && chainMode) {
+    const tokens = expression.split(/([+\-×÷])/).filter(Boolean);
+    if (tokens.length >= 3) {
+      const partial = computeChain(tokens.slice(0, 3));
+      expression = partial.toString();
+    }
+    if (!/[+\-×÷]$/.test(expression)) expression += value;
   } else {
-    expression += value;
+    if (expression === "0" && value !== "." && value !== "-") {
+      expression = value;
+    } else {
+      expression += value;
+    }
   }
 
   display.value = expression;
@@ -57,19 +81,21 @@ function deleteLast() {
 
 function evaluateExpression() {
   if (!expression) return;
-
   let expr = expression.replace(/×/g, "*").replace(/÷/g, "/");
   expr = expr.replace(/[-+*/]$/, "");
-
   try {
-    let result = Function(`return ${expr}`)();
+    let result;
+    if (chainMode) {
+      const tokens = expression.split(/([+\-×÷])/).filter(Boolean);
+      result = computeChain(tokens);
+    } else {
+      result = Function(`return ${expr}`)();
+    }
     result = parseFloat(result.toFixed(8));
-
     display.value =
       result.toString().length > 12
         ? result.toExponential(5)
         : result.toString();
-
     expression = result.toString();
     justEvaluated = true;
   } catch {
@@ -77,8 +103,20 @@ function evaluateExpression() {
     expression = "";
     justEvaluated = true;
   }
-
   adjustFontSize();
+}
+
+function computeChain(tokens) {
+  let result = parseFloat(tokens[0]);
+  for (let i = 1; i < tokens.length; i += 2) {
+    const op = tokens[i];
+    const num = parseFloat(tokens[i + 1]);
+    if (op === "+") result += num;
+    else if (op === "-") result -= num;
+    else if (op === "×") result *= num;
+    else if (op === "÷") result /= num;
+  }
+  return result;
 }
 
 function adjustFontSize() {
@@ -98,16 +136,13 @@ document.querySelector(".equals").addEventListener("click", evaluateExpression);
 
 window.addEventListener("keydown", (e) => {
   if (e.key >= "0" && e.key <= "9") appendToDisplay(e.key);
-
   if (["+", "-", "*", "/"].includes(e.key)) {
     const op = e.key === "*" ? "×" : e.key === "/" ? "÷" : e.key;
     appendToDisplay(op);
   }
-
   if (e.key === ".") appendDecimal();
   if (e.key === "Backspace") deleteLast();
   if (e.key === "Delete") clearAll();
-
   if (e.key === "Enter" || e.key === "=") {
     e.preventDefault();
     evaluateExpression();
